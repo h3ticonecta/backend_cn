@@ -48,9 +48,32 @@ O JSON de cada jogo segue o tipo `Game` do frontend (`id`, `title`, `provider`, 
 
 CORS liberado para `http://localhost:5173` por padrão (Vite).
 
+## Deploy (Railway / Gunicorn)
+
+O start usa **Gunicorn** (`requirements.txt`). Se o log mostrar `gunicorn: command not found`, faça redeploy após atualizar o repositório.
+
+Variáveis recomendadas em produção:
+
+| Variável | Exemplo |
+|----------|---------|
+| `DJANGO_SECRET_KEY` | string longa aleatória |
+| `DJANGO_DEBUG` | `false` |
+| `DATABASE_URL` | Postgres (addon Railway) |
+| `CORS_ALLOWED_ORIGINS` | URL do frontend deployado |
+| `DJANGO_ALLOWED_HOSTS` | domínio público da API |
+
+Após o primeiro deploy com banco persistente:
+
+```bash
+python manage.py seed_playhub
+python manage.py createsuperuser
+```
+
+Ou defina `DJANGO_SUPERUSER_*` e rode `createsuperuser --noinput` no shell do Railway.
+
 ## Banco de dados
 
-SQLite em `db.sqlite3` (desenvolvimento). Para PostgreSQL, altere `DATABASES` em `config/settings.py`.
+SQLite em `db.sqlite3` (desenvolvimento). Em produção, use `DATABASE_URL` (PostgreSQL).
 
 Repopular dados do frontend:
 
