@@ -22,10 +22,19 @@ ALLOWED_HOSTS = [
 ]
 
 if railway_host := os.environ.get("RAILWAY_PUBLIC_DOMAIN"):
-    ALLOWED_HOSTS.append(railway_host)
+    ALLOWED_HOSTS.append(railway_host.strip())
 
 if railway_private := os.environ.get("RAILWAY_PRIVATE_DOMAIN"):
-    ALLOWED_HOSTS.append(railway_private)
+    ALLOWED_HOSTS.append(railway_private.strip())
+
+# Railway: domínios *.up.railway.app (evita DisallowedHost / HTTP 400)
+_on_railway = bool(
+    os.environ.get("RAILWAY_ENVIRONMENT")
+    or os.environ.get("RAILWAY_PUBLIC_DOMAIN")
+    or os.environ.get("RAILWAY_SERVICE_ID")
+)
+if _on_railway and ".up.railway.app" not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(".up.railway.app")
 
 INSTALLED_APPS = [
     "django.contrib.admin",

@@ -60,8 +60,10 @@ Variáveis recomendadas em produção:
 | `DJANGO_SECRET_KEY` | string longa aleatória |
 | `DJANGO_DEBUG` | `false` |
 | `DATABASE_URL` | Postgres (addon Railway) |
-| `CORS_ALLOWED_ORIGINS` | URL do frontend deployado |
-| `DJANGO_ALLOWED_HOSTS` | domínio público da API |
+| `DJANGO_ALLOWED_HOSTS` | `backendcn-dev.up.railway.app` (domínio público da API) |
+| `CORS_ALLOWED_ORIGINS` | `https://frontendcn-dev.up.railway.app` (URL do frontend) |
+
+Se `GET /api/v1/home/` retorna **400** com *DisallowedHost*, o host não está em `ALLOWED_HOSTS`. Defina `DJANGO_ALLOWED_HOSTS` ou atualize o `settings.py` (wildcard `.up.railway.app` em deploy Railway).
 
 Após o primeiro deploy com banco persistente:
 
