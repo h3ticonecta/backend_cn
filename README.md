@@ -67,6 +67,9 @@ Variáveis recomendadas em produção:
 | `DJANGO_ALLOWED_HOSTS` | `backendcn-dev.up.railway.app` (domínio público da API) |
 | `DJANGO_CSRF_TRUSTED_ORIGINS` | `https://backendcn-dev.up.railway.app` (login do **Admin**) |
 | `CORS_ALLOWED_ORIGINS` | `https://frontendcn-dev.up.railway.app` (URL do frontend) |
+| `DJANGO_SUPERUSER_USERNAME` | `admin` — campo **Usuário** no login (não o e-mail) |
+| `DJANGO_SUPERUSER_PASSWORD` | senha do admin |
+| `DJANGO_SUPERUSER_EMAIL` | e-mail da conta |
 
 Se `GET /api/v1/home/` retorna **400** com *DisallowedHost*, o host não está em `ALLOWED_HOSTS`. Defina `DJANGO_ALLOWED_HOSTS` ou atualize o `settings.py` (wildcard `.up.railway.app` em deploy Railway).
 
@@ -80,13 +83,22 @@ python manage.py seed_roleta
 python manage.py seed_fortune_gems
 ```
 
-Após o primeiro deploy com banco persistente:
+### Login do Admin no Railway
+
+1. No deploy, roda `python manage.py ensure_superuser` (usa `DJANGO_SUPERUSER_*`).
+2. Em `/admin/`, use o **nome de usuário** (`DJANGO_SUPERUSER_USERNAME`), não o e-mail.
+3. Se aparecer *usuário e senha incorretos* mas as variáveis estão certas:
+   - Defina `DJANGO_SUPERUSER_RESET_PASSWORD=true`
+   - Redeploy uma vez (atualiza a senha no Postgres)
+   - Remova ou defina `false` depois
+
+Alternativa no shell do Railway:
 
 ```bash
-python manage.py createsuperuser
+python manage.py ensure_superuser
+# ou com reset:
+DJANGO_SUPERUSER_RESET_PASSWORD=true python manage.py ensure_superuser
 ```
-
-Ou defina `DJANGO_SUPERUSER_*` e rode `createsuperuser --noinput` no shell do Railway.
 
 ## Banco de dados
 
