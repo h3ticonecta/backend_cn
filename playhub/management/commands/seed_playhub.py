@@ -107,6 +107,8 @@ GAMES = [
         "badge": "",
         "gradient": ["#78350f", "#eab308"],
         "icon": "🐺",
+        "play_kind": "slot",
+        "play_mesa_slug": "wolf-gold",
     },
     {
         "slug": "lightning-roulette",

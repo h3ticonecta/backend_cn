@@ -47,6 +47,7 @@ No admin você gerencia: **Jogos**, **Provedores**, **Ao vivo**, **Promoções**
 | GET | `/api/v1/hero/` | Banner principal |
 | GET/POST | `/api/v1/roleta/…` | Jogo Roleta (demo) — [contrato](./docs/contratos/roleta.md) |
 | GET/POST | `/api/v1/slots/fortune-gems/…` | Slot Fortune Gems (demo): config, sessões, girar |
+| GET/POST | `/api/v1/slots/wolf-gold/…` | Slot Wolf Gold (demo): 5×3, 25 linhas, free spins, money respin |
 
 O JSON de cada jogo segue o tipo `Game` do frontend (`id`, `title`, `provider`, `category`, `badge`, `rtp`, `gradient`, `icon`).
 

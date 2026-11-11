@@ -63,14 +63,10 @@ class GameDetailView(APIView):
 
         slot_config = None
         if game.play_kind == Game.PlayKind.SLOT:
-            from playhub.fortune_gems.services import FortuneGemsError, get_active_jogo, jogo_config_payload
+            from playhub.play_meta import slot_config_for_slug
 
             slot_slug = (game.play_mesa_slug or game.slug).strip()
-            try:
-                jogo = get_active_jogo(slot_slug)
-                slot_config = jogo_config_payload(jogo)
-            except FortuneGemsError:
-                slot_config = None
+            slot_config = slot_config_for_slug(slot_slug)
 
         return Response(card_payload(game, roleta_mesa=roleta_mesa, slot_config=slot_config))
 
