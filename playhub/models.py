@@ -36,6 +36,10 @@ class Game(models.Model):
         HOT = "hot", "Hot"
         JACKPOT = "jackpot", "Jackpot"
 
+    class PlayKind(models.TextChoices):
+        NONE = "", "Somente vitrine"
+        ROLETA = "roleta", "Roleta (API)"
+
     slug = models.SlugField("id", max_length=80, unique=True)
     title = models.CharField("título", max_length=200)
     provider = models.ForeignKey(
@@ -63,6 +67,19 @@ class Game(models.Model):
     is_featured = models.BooleanField("destaque (populares)", default=False)
     is_new = models.BooleanField("novo", default=False)
     is_active = models.BooleanField("ativo", default=True)
+    play_kind = models.CharField(
+        "modo jogável",
+        max_length=20,
+        choices=PlayKind.choices,
+        blank=True,
+        default=PlayKind.NONE,
+    )
+    play_mesa_slug = models.SlugField(
+        "mesa vinculada (roleta)",
+        max_length=80,
+        blank=True,
+        help_text="Slug da RoletaMesa quando play_kind=roleta.",
+    )
     sort_order = models.PositiveIntegerField("ordem", default=0)
 
     class Meta:

@@ -24,6 +24,8 @@ GAMES = [
         "gradient": ["#065f46", "#047857"],
         "icon": "🎡",
         "is_featured": True,
+        "play_kind": "roleta",
+        "play_mesa_slug": "roleta-brasil",
     },
     {
         "slug": "aviator",
@@ -204,6 +206,8 @@ class Command(BaseCommand):
                     "icon": row["icon"],
                     "is_featured": row.get("is_featured", False),
                     "is_new": row.get("is_new", False),
+                    "play_kind": row.get("play_kind", ""),
+                    "play_mesa_slug": row.get("play_mesa_slug", ""),
                     "sort_order": i,
                     "is_active": True,
                 },

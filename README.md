@@ -38,6 +38,7 @@ No admin você gerencia: **Jogos**, **Provedores**, **Ao vivo**, **Promoções**
 |--------|----------|-----------|
 | GET | `/api/v1/home/` | Payload completo (games, categories, live, promos, hero) |
 | GET | `/api/v1/games/?category=slots&search=aviator` | Lista de jogos filtrada |
+| GET | `/api/v1/games/roleta-brasil/` | Card Roleta + meta `play` + config da mesa |
 | GET | `/api/v1/categories/` | Abas de categoria |
 | GET | `/api/v1/providers/` | Provedores |
 | GET | `/api/v1/live/` | Mesas ao vivo |

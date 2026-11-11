@@ -18,12 +18,21 @@ class GameAdmin(admin.ModelAdmin):
         "provider",
         "category",
         "badge",
+        "play_kind",
         "is_featured",
         "is_new",
         "is_active",
         "sort_order",
     )
-    list_filter = ("category", "badge", "is_featured", "is_new", "is_active", "provider")
+    list_filter = (
+        "category",
+        "badge",
+        "play_kind",
+        "is_featured",
+        "is_new",
+        "is_active",
+        "provider",
+    )
     search_fields = ("title", "slug", "provider__name")
     prepopulated_fields = {"slug": ("title",)}
     autocomplete_fields = ("provider",)

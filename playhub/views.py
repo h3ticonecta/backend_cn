@@ -3,7 +3,10 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from playhub.roulette.services import RoletaError, get_active_mesa, mesa_config_payload
+
 from .models import Game, HeroBanner, LiveSession, Promotion, Provider
+from .play_meta import card_payload
 from .serializers import (
     CATEGORY_CHOICES,
     GameSerializer,
@@ -35,6 +38,30 @@ class GameListView(generics.ListAPIView):
             )
 
         return qs
+
+
+class GameDetailView(APIView):
+    """GET /api/v1/games/{slug}/ — card + metadados de jogo (ex.: Roleta)."""
+
+    def get(self, request, slug: str):
+        game = (
+            Game.objects.filter(is_active=True, slug=slug)
+            .select_related("provider")
+            .first()
+        )
+        if not game:
+            return Response({"detail": "Jogo não encontrado."}, status=404)
+
+        roleta_mesa = None
+        if game.play_kind == Game.PlayKind.ROLETA:
+            mesa_slug = (game.play_mesa_slug or game.slug).strip()
+            try:
+                mesa = get_active_mesa(mesa_slug)
+                roleta_mesa = mesa_config_payload(mesa)
+            except RoletaError:
+                roleta_mesa = None
+
+        return Response(card_payload(game, roleta_mesa=roleta_mesa))
 
 
 class CategoryListView(APIView):

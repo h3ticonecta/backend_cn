@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import Game, HeroBanner, LiveSession, Promotion, Provider
+from .play_meta import play_meta_for_game
 
 CATEGORY_CHOICES = [
     {"id": "todos", "label": "Todos"},
@@ -18,6 +19,7 @@ class GameSerializer(serializers.ModelSerializer):
     provider = serializers.CharField(source="provider.name")
     badge = serializers.SerializerMethodField()
     gradient = serializers.SerializerMethodField()
+    play = serializers.SerializerMethodField()
 
     class Meta:
         model = Game
@@ -30,6 +32,7 @@ class GameSerializer(serializers.ModelSerializer):
             "rtp",
             "gradient",
             "icon",
+            "play",
         )
 
     def get_badge(self, obj: Game):
@@ -37,6 +40,9 @@ class GameSerializer(serializers.ModelSerializer):
 
     def get_gradient(self, obj: Game):
         return [obj.gradient_start, obj.gradient_end]
+
+    def get_play(self, obj: Game):
+        return play_meta_for_game(obj)
 
 
 class ProviderSerializer(serializers.ModelSerializer):

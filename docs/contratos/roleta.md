@@ -6,6 +6,52 @@ API de **roleta europeia (0–36)** com fichas demo. Sem dinheiro real.
 
 ---
 
+## 0. Card na grade (jogo `roleta-brasil`)
+
+O card **Roleta Brasil** na home vem de `GET /api/v1/home/` com `play.kind === "roleta"`.
+
+| Campo no `Game` | Banco | Valor seed |
+|-----------------|-------|------------|
+| `play_kind` | `playhub_game.play_kind` | `roleta` |
+| `play_mesa_slug` | `playhub_game.play_mesa_slug` | `roleta-brasil` |
+
+### `GET /api/v1/games/roleta-brasil/`
+
+Agrega vitrine + links da API + config da mesa.
+
+**200 OK**
+
+```json
+{
+  "card": {
+    "id": "roleta-brasil",
+    "title": "Roleta Brasil",
+    "provider": "Evolution",
+    "category": "ao-vivo",
+    "badge": "hot",
+    "gradient": ["#065f46", "#047857"],
+    "icon": "🎡",
+    "play": {
+      "kind": "roleta",
+      "mesa_slug": "roleta-brasil",
+      "client_route": "#/roleta",
+      "api": {
+        "config": "/api/v1/roleta/?mesa=roleta-brasil",
+        "sessoes": "/api/v1/roleta/sessoes/",
+        "girar": "/api/v1/roleta/girar/",
+        "card": "/api/v1/games/roleta-brasil/"
+      }
+    }
+  },
+  "play": { "...": "mesmo objeto play acima" },
+  "roleta": { "...": "payload de GET /api/v1/roleta/ sem historico ou com mesa" }
+}
+```
+
+Demais jogos: `play` é `null` e `GET /api/v1/games/{slug}/` não inclui chave `roleta`.
+
+---
+
 ## 1. Configuração e histórico
 
 ### `GET /api/v1/roleta/`
@@ -207,8 +253,9 @@ Validação DRF (campos malformados) → **400** com detalhe padrão do REST fra
 | `RoletaSessao` | UUID + saldo demo |
 | `RoletaRodada` | Resultado de cada giro |
 | `RoletaAposta` | Linhas de aposta |
+| `Game` (`play_kind`, `play_mesa_slug`) | Vínculo do **card** com a mesa |
 
-Seed: `python manage.py seed_roleta`
+Seed: `python manage.py seed_roleta` e `python manage.py seed_playhub`
 
 ---
 
