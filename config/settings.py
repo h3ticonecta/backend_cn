@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     "playhub",
+    "playhub.roulette.apps.RoletaConfig",
 ]
 
 MIDDLEWARE = [

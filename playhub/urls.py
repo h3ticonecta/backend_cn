@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 
 from . import views
 
@@ -10,4 +10,5 @@ urlpatterns = [
     path("v1/promotions/", views.PromotionListView.as_view(), name="promotion-list"),
     path("v1/hero/", views.HeroBannerView.as_view(), name="hero"),
     path("v1/home/", views.HomeAggregateView.as_view(), name="home"),
+    path("v1/roleta/", include("playhub.roulette.urls")),
 ]
