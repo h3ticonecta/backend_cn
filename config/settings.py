@@ -36,6 +36,35 @@ _on_railway = bool(
 if _on_railway and ".up.railway.app" not in ALLOWED_HOSTS:
     ALLOWED_HOSTS.append(".up.railway.app")
 
+
+def _origin(scheme: str, host: str) -> str:
+    return f"{scheme}://{host}".rstrip("/")
+
+
+CSRF_TRUSTED_ORIGINS = [
+    o.strip()
+    for o in os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",")
+    if o.strip()
+]
+
+for _host in (
+    os.environ.get("RAILWAY_PUBLIC_DOMAIN", "").strip(),
+    *[h.strip() for h in ALLOWED_HOSTS if h.strip() and not h.startswith(".")],
+):
+    if not _host or _host in ("localhost", "127.0.0.1", "testserver"):
+        continue
+    for _scheme in ("https", "http"):
+        _origin_url = _origin(_scheme, _host)
+        if _origin_url not in CSRF_TRUSTED_ORIGINS:
+            CSRF_TRUSTED_ORIGINS.append(_origin_url)
+
+if _on_railway:
+    # Railway termina TLS; Django precisa enxergar o request como HTTPS.
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    USE_X_FORWARDED_HOST = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",

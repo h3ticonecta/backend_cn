@@ -62,9 +62,12 @@ Variáveis recomendadas em produção:
 | `DJANGO_DEBUG` | `false` |
 | `DATABASE_URL` | Postgres (addon Railway) |
 | `DJANGO_ALLOWED_HOSTS` | `backendcn-dev.up.railway.app` (domínio público da API) |
+| `DJANGO_CSRF_TRUSTED_ORIGINS` | `https://backendcn-dev.up.railway.app` (login do **Admin**) |
 | `CORS_ALLOWED_ORIGINS` | `https://frontendcn-dev.up.railway.app` (URL do frontend) |
 
 Se `GET /api/v1/home/` retorna **400** com *DisallowedHost*, o host não está em `ALLOWED_HOSTS`. Defina `DJANGO_ALLOWED_HOSTS` ou atualize o `settings.py` (wildcard `.up.railway.app` em deploy Railway).
+
+Se o **Admin** retorna **403 CSRF / Origin checking failed**, inclua o domínio em `DJANGO_CSRF_TRUSTED_ORIGINS` com `https://` (ou redeploy após atualizar `settings.py`, que lê `RAILWAY_PUBLIC_DOMAIN`).
 
 No Railway, o start já roda `seed_playhub` e `seed_roleta` (ver `Procfile` / `nixpacks.toml`). Se a home vier com `games: []`, execute no shell do serviço:
 
