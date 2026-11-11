@@ -1,0 +1,59 @@
+# PlayHub — Backend (Django)
+
+API REST e painel **Django Admin** para a landing [PlayHub — Jogos Online](../frontend_cn).
+
+## Setup rápido (Windows)
+
+```powershell
+cd C:\Users\Gustavo\Documents\GitHub\backend_cn
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+copy .env.example .env
+python manage.py migrate
+python manage.py seed_playhub
+python manage.py createsuperuser
+python manage.py runserver
+```
+
+### Super Admin (Django)
+
+1. Acesse **http://127.0.0.1:8000/admin/**
+2. Entre com o usuário criado em `createsuperuser` (ou use as variáveis em `.env` com `createsuperuser --noinput`).
+
+Criação não interativa:
+
+```powershell
+$env:DJANGO_SUPERUSER_USERNAME="admin"
+$env:DJANGO_SUPERUSER_EMAIL="admin@playhub.local"
+$env:DJANGO_SUPERUSER_PASSWORD="PlayHub@Admin2026"
+python manage.py createsuperuser --noinput
+```
+
+No admin você gerencia: **Jogos**, **Provedores**, **Ao vivo**, **Promoções** e **Banner hero**.
+
+## API
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/api/v1/home/` | Payload completo (games, categories, live, promos, hero) |
+| GET | `/api/v1/games/?category=slots&search=aviator` | Lista de jogos filtrada |
+| GET | `/api/v1/categories/` | Abas de categoria |
+| GET | `/api/v1/providers/` | Provedores |
+| GET | `/api/v1/live/` | Mesas ao vivo |
+| GET | `/api/v1/promotions/` | Promoções |
+| GET | `/api/v1/hero/` | Banner principal |
+
+O JSON de cada jogo segue o tipo `Game` do frontend (`id`, `title`, `provider`, `category`, `badge`, `rtp`, `gradient`, `icon`).
+
+CORS liberado para `http://localhost:5173` por padrão (Vite).
+
+## Banco de dados
+
+SQLite em `db.sqlite3` (desenvolvimento). Para PostgreSQL, altere `DATABASES` em `config/settings.py`.
+
+Repopular dados do frontend:
+
+```powershell
+python manage.py seed_playhub --reset
+```
