@@ -3,4 +3,4 @@
 cmds = ["python manage.py collectstatic --noinput"]
 
 [start]
-cmd = "python manage.py migrate --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT"
+cmd = "python manage.py migrate --noinput && python manage.py seed_playhub && python manage.py seed_roleta && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT"

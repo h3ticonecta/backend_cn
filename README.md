@@ -66,10 +66,16 @@ Variáveis recomendadas em produção:
 
 Se `GET /api/v1/home/` retorna **400** com *DisallowedHost*, o host não está em `ALLOWED_HOSTS`. Defina `DJANGO_ALLOWED_HOSTS` ou atualize o `settings.py` (wildcard `.up.railway.app` em deploy Railway).
 
-Após o primeiro deploy com banco persistente:
+No Railway, o start já roda `seed_playhub` e `seed_roleta` (ver `Procfile` / `nixpacks.toml`). Se a home vier com `games: []`, execute no shell do serviço:
 
 ```bash
 python manage.py seed_playhub
+python manage.py seed_roleta
+```
+
+Após o primeiro deploy com banco persistente:
+
+```bash
 python manage.py createsuperuser
 ```
 
