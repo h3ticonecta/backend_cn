@@ -17,10 +17,29 @@ def play_meta_for_game(game: Game) -> dict | None:
                 "card": f"/api/v1/games/{game.slug}/",
             },
         }
+    if game.play_kind == Game.PlayKind.SLOT:
+        slot_slug = (game.play_mesa_slug or game.slug).strip() or "fortune-gems"
+        return {
+            "kind": "slot",
+            "slot_slug": slot_slug,
+            "client_route": "#/fortune-gems",
+            "api": {
+                "config": f"/api/v1/slots/fortune-gems/?jogo={slot_slug}",
+                "sessoes": "/api/v1/slots/fortune-gems/sessoes/",
+                "sessao_detail": "/api/v1/slots/fortune-gems/sessoes/{sessao_id}/",
+                "girar": "/api/v1/slots/fortune-gems/girar/",
+                "card": f"/api/v1/games/{game.slug}/",
+            },
+        }
     return None
 
 
-def card_payload(game: Game, *, roleta_mesa: dict | None = None) -> dict:
+def card_payload(
+    game: Game,
+    *,
+    roleta_mesa: dict | None = None,
+    slot_config: dict | None = None,
+) -> dict:
     from playhub.serializers import GameSerializer
 
     data = {
@@ -29,4 +48,6 @@ def card_payload(game: Game, *, roleta_mesa: dict | None = None) -> dict:
     }
     if roleta_mesa is not None:
         data["roleta"] = roleta_mesa
+    if slot_config is not None:
+        data["slot"] = slot_config
     return data

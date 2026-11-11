@@ -12,4 +12,5 @@ urlpatterns = [
     path("v1/hero/", views.HeroBannerView.as_view(), name="hero"),
     path("v1/home/", views.HomeAggregateView.as_view(), name="home"),
     path("v1/roleta/", include("playhub.roulette.urls")),
+    path("v1/slots/fortune-gems/", include("playhub.fortune_gems.urls")),
 ]

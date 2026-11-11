@@ -39,12 +39,14 @@ No admin você gerencia: **Jogos**, **Provedores**, **Ao vivo**, **Promoções**
 | GET | `/api/v1/home/` | Payload completo (games, categories, live, promos, hero) |
 | GET | `/api/v1/games/?category=slots&search=aviator` | Lista de jogos filtrada |
 | GET | `/api/v1/games/roleta-brasil/` | Card Roleta + meta `play` + config da mesa |
+| GET | `/api/v1/games/fortune-gems/` | Card Fortune Gems + meta `play` + config do slot |
 | GET | `/api/v1/categories/` | Abas de categoria |
 | GET | `/api/v1/providers/` | Provedores |
 | GET | `/api/v1/live/` | Mesas ao vivo |
 | GET | `/api/v1/promotions/` | Promoções |
 | GET | `/api/v1/hero/` | Banner principal |
 | GET/POST | `/api/v1/roleta/…` | Jogo Roleta (demo) — [contrato](./docs/contratos/roleta.md) |
+| GET/POST | `/api/v1/slots/fortune-gems/…` | Slot Fortune Gems (demo): config, sessões, girar |
 
 O JSON de cada jogo segue o tipo `Game` do frontend (`id`, `title`, `provider`, `category`, `badge`, `rtp`, `gradient`, `icon`).
 
@@ -74,6 +76,7 @@ No Railway, o start já roda `seed_playhub` e `seed_roleta` (ver `Procfile` / `n
 ```bash
 python manage.py seed_playhub
 python manage.py seed_roleta
+python manage.py seed_fortune_gems
 ```
 
 Após o primeiro deploy com banco persistente:

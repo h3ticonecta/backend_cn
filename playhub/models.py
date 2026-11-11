@@ -39,6 +39,7 @@ class Game(models.Model):
     class PlayKind(models.TextChoices):
         NONE = "", "Somente vitrine"
         ROLETA = "roleta", "Roleta (API)"
+        SLOT = "slot", "Slot (API)"
 
     slug = models.SlugField("id", max_length=80, unique=True)
     title = models.CharField("título", max_length=200)
@@ -78,7 +79,7 @@ class Game(models.Model):
         "mesa vinculada (roleta)",
         max_length=80,
         blank=True,
-        help_text="Slug da RoletaMesa quando play_kind=roleta.",
+        help_text="Slug da mesa (roleta) ou do jogo slot quando play_kind=roleta/slot.",
     )
     sort_order = models.PositiveIntegerField("ordem", default=0)
 

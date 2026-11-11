@@ -14,6 +14,8 @@ GAMES = [
         "gradient": ["#5b21b6", "#db2777"],
         "icon": "💎",
         "is_featured": True,
+        "play_kind": "slot",
+        "play_mesa_slug": "fortune-gems",
     },
     {
         "slug": "roleta-brasil",

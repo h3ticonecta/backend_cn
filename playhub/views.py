@@ -61,7 +61,18 @@ class GameDetailView(APIView):
             except RoletaError:
                 roleta_mesa = None
 
-        return Response(card_payload(game, roleta_mesa=roleta_mesa))
+        slot_config = None
+        if game.play_kind == Game.PlayKind.SLOT:
+            from playhub.fortune_gems.services import FortuneGemsError, get_active_jogo, jogo_config_payload
+
+            slot_slug = (game.play_mesa_slug or game.slug).strip()
+            try:
+                jogo = get_active_jogo(slot_slug)
+                slot_config = jogo_config_payload(jogo)
+            except FortuneGemsError:
+                slot_config = None
+
+        return Response(card_payload(game, roleta_mesa=roleta_mesa, slot_config=slot_config))
 
 
 class CategoryListView(APIView):

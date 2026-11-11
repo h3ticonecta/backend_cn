@@ -76,6 +76,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "playhub",
     "playhub.roulette.apps.RoletaConfig",
+    "playhub.fortune_gems.apps.FortuneGemsConfig",
 ]
 
 MIDDLEWARE = [
