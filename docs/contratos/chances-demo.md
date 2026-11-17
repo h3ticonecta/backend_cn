@@ -104,3 +104,4 @@ Comando manual: `python manage.py sync_game_chances` (ver README do backend).
 | Roleta | [roleta.md](./roleta.md) |
 | Fortune Gems | [fortune-gems.md](./fortune-gems.md) |
 | Wolf Gold | [wolf-gold.md](./wolf-gold.md) |
+| Candy Cascade (Sweet Bonanza) | [candy-cascade.md](./candy-cascade.md) |

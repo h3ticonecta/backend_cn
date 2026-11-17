@@ -40,6 +40,7 @@ No admin você gerencia: **Jogos**, **Provedores**, **Ao vivo**, **Promoções**
 | GET | `/api/v1/games/?category=slots&search=aviator` | Lista de jogos filtrada |
 | GET | `/api/v1/games/roleta-brasil/` | Card Roleta + meta `play` + config da mesa |
 | GET | `/api/v1/games/fortune-gems/` | Card Fortune Gems + meta `play` + config do slot |
+| GET | `/api/v1/games/sweet-bonanza/` | Card Sweet Bonanza → slot **Candy Cascade** (modal demo) |
 | GET | `/api/v1/categories/` | Abas de categoria |
 | GET | `/api/v1/providers/` | Provedores |
 | GET | `/api/v1/live/` | Mesas ao vivo |
@@ -48,6 +49,7 @@ No admin você gerencia: **Jogos**, **Provedores**, **Ao vivo**, **Promoções**
 | GET/POST | `/api/v1/roleta/…` | Jogo Roleta (demo) — [contrato](./docs/contratos/roleta.md) |
 | GET/POST | `/api/v1/slots/fortune-gems/…` | Slot Fortune Gems — [contrato](./docs/contratos/fortune-gems.md) |
 | GET/POST | `/api/v1/slots/wolf-gold/…` | Slot Wolf Gold — [contrato](./docs/contratos/wolf-gold.md) |
+| GET/POST | `/api/v1/slots/candy-cascade/…` | Candy Cascade (card Sweet Bonanza) — [contrato](./docs/contratos/candy-cascade.md) |
 
 ### Contratos (frontend)
 
@@ -57,6 +59,7 @@ No admin você gerencia: **Jogos**, **Provedores**, **Ao vivo**, **Promoções**
 | [roleta.md](./docs/contratos/roleta.md) | Roleta completa |
 | [fortune-gems.md](./docs/contratos/fortune-gems.md) | Fortune Gems |
 | [wolf-gold.md](./docs/contratos/wolf-gold.md) | Wolf Gold |
+| [candy-cascade.md](./docs/contratos/candy-cascade.md) | Candy Cascade / modal Sweet Bonanza |
 
 O JSON de cada jogo segue o tipo `Game` do frontend:
 

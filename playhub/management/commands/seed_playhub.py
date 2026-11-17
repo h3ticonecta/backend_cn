@@ -88,6 +88,8 @@ GAMES = [
         "rtp": "96.4%",
         "gradient": ["#ec4899", "#a855f7"],
         "icon": "🍬",
+        "play_kind": "slot",
+        "play_mesa_slug": "candy-cascade",
     },
     {
         "slug": "bac-bo",

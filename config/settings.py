@@ -78,6 +78,7 @@ INSTALLED_APPS = [
     "playhub.roulette.apps.RoletaConfig",
     "playhub.fortune_gems.apps.FortuneGemsConfig",
     "playhub.wolf_gold.apps.WolfGoldConfig",
+    "playhub.candy_cascade.apps.CandyCascadeConfig",
 ]
 
 MIDDLEWARE = [

@@ -11,6 +11,11 @@ SLOT_REGISTRY: dict[str, dict[str, str]] = {
         "api_prefix": "/api/v1/slots/wolf-gold/",
         "contrato": "/docs/contratos/wolf-gold.md",
     },
+    "candy-cascade": {
+        "client_route": "#/sweet-bonanza",
+        "api_prefix": "/api/v1/slots/candy-cascade/",
+        "contrato": "/docs/contratos/candy-cascade.md",
+    },
 }
 
 
@@ -38,7 +43,8 @@ def play_meta_for_game(game: Game) -> dict | None:
         return {
             "kind": "slot",
             "slot_slug": slot_slug,
-            "client_route": slot["client_route"],
+            "card_slug": game.slug,
+            "client_route": slot.get("client_route") or f"#/{game.slug}",
             "contrato": slot.get("contrato"),
             "chances_contrato": "/docs/contratos/chances-demo.md",
             "api": {
@@ -53,6 +59,17 @@ def play_meta_for_game(game: Game) -> dict | None:
 
 
 def slot_config_for_slug(slot_slug: str) -> dict | None:
+    if slot_slug in ("candy-cascade", "sweet-bonanza"):
+        from playhub.candy_cascade.services import (
+            CandyCascadeError,
+            get_active_jogo,
+            jogo_config_payload,
+        )
+
+        try:
+            return jogo_config_payload(get_active_jogo(slot_slug))
+        except CandyCascadeError:
+            return None
     if slot_slug == "wolf-gold":
         from playhub.wolf_gold.services import WolfGoldError, get_active_jogo, jogo_config_payload
 

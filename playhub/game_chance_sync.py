@@ -30,11 +30,11 @@ def sync_from_game(game: Game) -> dict[str, int]:
     """Propaga chances do catálogo para RoletaMesa / slots vinculados pelo slug."""
     slug = playable_slug(game)
     if not slug:
-        return {"roleta": 0, "fortune_gems": 0, "wolf_gold": 0, "games": 0}
+        return {"roleta": 0, "fortune_gems": 0, "wolf_gold": 0, "candy_cascade": 0, "games": 0}
 
     casa = game.percentual_casa
     usuario = game.percentual_usuario
-    counts = {"roleta": 0, "fortune_gems": 0, "wolf_gold": 0, "games": 0}
+    counts = {"roleta": 0, "fortune_gems": 0, "wolf_gold": 0, "candy_cascade": 0, "games": 0}
 
     if game.play_kind == Game.PlayKind.ROLETA:
         from playhub.roulette.models import RoletaMesa
@@ -45,6 +45,7 @@ def sync_from_game(game: Game) -> dict[str, int]:
         )
 
     if game.play_kind == Game.PlayKind.SLOT:
+        from playhub.candy_cascade.models import CandyCascadeJogo
         from playhub.fortune_gems.models import FortuneGemsJogo
         from playhub.wolf_gold.models import WolfGoldJogo
 
@@ -53,6 +54,10 @@ def sync_from_game(game: Game) -> dict[str, int]:
             percentual_usuario=usuario,
         )
         counts["wolf_gold"] = WolfGoldJogo.objects.filter(slug=slug).update(
+            percentual_casa=casa,
+            percentual_usuario=usuario,
+        )
+        counts["candy_cascade"] = CandyCascadeJogo.objects.filter(slug=slug).update(
             percentual_casa=casa,
             percentual_usuario=usuario,
         )
@@ -82,9 +87,17 @@ def sync_from_wolf_gold_jogo(jogo) -> int:
     )
 
 
+def sync_from_candy_cascade_jogo(jogo) -> int:
+    return _slot_games_qs(jogo.slug).update(
+        percentual_casa=jogo.percentual_casa,
+        percentual_usuario=jogo.percentual_usuario,
+    )
+
+
 def connect_chance_sync_signals() -> None:
     from django.db.models.signals import post_save
 
+    from playhub.candy_cascade.models import CandyCascadeJogo
     from playhub.fortune_gems.models import FortuneGemsJogo
     from playhub.roulette.models import RoletaMesa
     from playhub.wolf_gold.models import WolfGoldJogo
@@ -101,6 +114,9 @@ def connect_chance_sync_signals() -> None:
     def on_wolf_gold_saved(sender, instance: WolfGoldJogo, **kwargs):
         sync_from_wolf_gold_jogo(instance)
 
+    def on_candy_cascade_saved(sender, instance: CandyCascadeJogo, **kwargs):
+        sync_from_candy_cascade_jogo(instance)
+
     uid = "playhub_chance_sync"
     post_save.connect(on_game_saved, sender=Game, dispatch_uid=f"{uid}_game")
     post_save.connect(
@@ -111,4 +127,7 @@ def connect_chance_sync_signals() -> None:
     )
     post_save.connect(
         on_wolf_gold_saved, sender=WolfGoldJogo, dispatch_uid=f"{uid}_wg"
+    )
+    post_save.connect(
+        on_candy_cascade_saved, sender=CandyCascadeJogo, dispatch_uid=f"{uid}_cc"
     )

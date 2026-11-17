@@ -1,11 +1,13 @@
 from django.core.management.base import BaseCommand
 
 from playhub.game_chance_sync import (
+    sync_from_candy_cascade_jogo,
     sync_from_fortune_gems_jogo,
     sync_from_game,
     sync_from_roleta_mesa,
     sync_from_wolf_gold_jogo,
 )
+from playhub.candy_cascade.models import CandyCascadeJogo
 from playhub.fortune_gems.models import FortuneGemsJogo
 from playhub.models import Game
 from playhub.roulette.models import RoletaMesa
@@ -44,8 +46,9 @@ class Command(BaseCommand):
             r = sum(sync_from_roleta_mesa(m) for m in RoletaMesa.objects.all())
             f = sum(sync_from_fortune_gems_jogo(j) for j in FortuneGemsJogo.objects.all())
             w = sum(sync_from_wolf_gold_jogo(j) for j in WolfGoldJogo.objects.all())
+            c = sum(sync_from_candy_cascade_jogo(j) for j in CandyCascadeJogo.objects.all())
             self.stdout.write(
                 self.style.SUCCESS(
-                    f"Backend → catálogo: mesas={r}, fortune_gems={f}, wolf_gold={w} registros."
+                    f"Backend → catálogo: mesas={r}, fortune_gems={f}, wolf_gold={w}, candy_cascade={c}."
                 )
             )
