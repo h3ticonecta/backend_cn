@@ -3,8 +3,10 @@ from decimal import Decimal
 
 from django.db import models
 
+from playhub.chance_config import ChancePercentMixin
 
-class WolfGoldJogo(models.Model):
+
+class WolfGoldJogo(ChancePercentMixin, models.Model):
     slug = models.SlugField(unique=True, default="wolf-gold")
     nome = models.CharField(max_length=120, default="Wolf Gold")
     rtp_label = models.CharField(max_length=20, default="96.0%")

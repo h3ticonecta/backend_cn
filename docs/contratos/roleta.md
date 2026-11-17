@@ -4,6 +4,8 @@ API de **roleta europeia (0–36)** com fichas demo. Sem dinheiro real.
 
 **Base URL:** `{API}/api/v1/roleta/`
 
+**Chances demo (casa × usuário):** [chances-demo.md](./chances-demo.md) — campos `mesa.chances` e `percentual_*` no card.
+
 ---
 
 ## 0. Card na grade (jogo `roleta-brasil`)
@@ -29,8 +31,11 @@ Agrega vitrine + links da API + config da mesa.
     "provider": "Evolution",
     "category": "ao-vivo",
     "badge": "hot",
+    "rtp": "",
     "gradient": ["#065f46", "#047857"],
     "icon": "🎡",
+    "percentual_casa": "55.00",
+    "percentual_usuario": "45.00",
     "play": {
       "kind": "roleta",
       "mesa_slug": "roleta-brasil",
@@ -69,7 +74,11 @@ Query opcional: `?mesa=roleta-brasil` (slug da mesa).
     "saldo_inicial": "1000.00",
     "aposta_minima": "1.00",
     "aposta_maxima": "500.00",
-    "max_apostas_por_giro": 12
+    "max_apostas_por_giro": 12,
+    "chances": {
+      "percentual_casa": "55.00",
+      "percentual_usuario": "45.00"
+    }
   },
   "tipos_aposta": [
     {
@@ -249,11 +258,13 @@ Validação DRF (campos malformados) → **400** com detalhe padrão do REST fra
 
 | Modelo | Uso |
 |--------|-----|
-| `RoletaMesa` | Limites, slug, ativação |
+| `RoletaMesa` | Limites, slug, ativação, `percentual_casa` / `percentual_usuario` |
 | `RoletaSessao` | UUID + saldo demo |
 | `RoletaRodada` | Resultado de cada giro |
 | `RoletaAposta` | Linhas de aposta |
-| `Game` (`play_kind`, `play_mesa_slug`) | Vínculo do **card** com a mesa |
+| `Game` (`play_kind`, `play_mesa_slug`) | Vínculo do **card** com a mesa; chances sincronizadas com a mesa |
+
+Sincronização Admin e significado dos percentuais: [chances-demo.md](./chances-demo.md).
 
 Seed: `python manage.py seed_roleta` e `python manage.py seed_playhub`
 

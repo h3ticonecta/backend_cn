@@ -1,5 +1,7 @@
 from django.db import models
 
+from playhub.chance_config import ChancePercentMixin
+
 
 class Provider(models.Model):
     name = models.CharField("nome", max_length=120, unique=True)
@@ -23,7 +25,7 @@ class Provider(models.Model):
         super().save(*args, **kwargs)
 
 
-class Game(models.Model):
+class Game(ChancePercentMixin, models.Model):
     class Category(models.TextChoices):
         SLOTS = "slots", "Slots"
         MESA = "mesa", "Mesa"

@@ -11,9 +11,39 @@ class RoletaApostaInline(admin.TabularInline):
 
 @admin.register(RoletaMesa)
 class RoletaMesaAdmin(admin.ModelAdmin):
-    list_display = ("nome", "slug", "ativa", "saldo_inicial", "aposta_minima", "aposta_maxima")
+    list_display = (
+        "nome",
+        "slug",
+        "ativa",
+        "percentual_casa",
+        "percentual_usuario",
+        "saldo_inicial",
+        "aposta_minima",
+        "aposta_maxima",
+    )
     list_filter = ("ativa",)
     prepopulated_fields = {"slug": ("nome",)}
+    fieldsets = (
+        (None, {"fields": ("slug", "nome", "variante", "ativa")}),
+        (
+            "Limites",
+            {
+                "fields": (
+                    "saldo_inicial",
+                    "aposta_minima",
+                    "aposta_maxima",
+                    "max_apostas_por_giro",
+                )
+            },
+        ),
+        (
+            "Chances (casa × usuário)",
+            {
+                "fields": ("percentual_casa", "percentual_usuario"),
+                "description": "Sincroniza com o jogo do catálogo que usa esta mesa (play_mesa_slug).",
+            },
+        ),
+    )
 
 
 @admin.register(RoletaSessao)

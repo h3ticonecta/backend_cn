@@ -2,7 +2,13 @@ from decimal import Decimal, InvalidOperation
 
 from django.db import transaction
 
-from playhub.fortune_gems.engine import SYMBOL_IDS, evaluate_spin, paytable_payload, spin_reels
+from playhub.chance_config import chances_payload, roll_favor_usuario
+from playhub.fortune_gems.engine import (
+    SYMBOL_IDS,
+    evaluate_spin,
+    paytable_payload,
+    spin_reels_biased,
+)
 from playhub.fortune_gems.models import FortuneGemsGiro, FortuneGemsJogo, FortuneGemsSessao
 
 
@@ -34,6 +40,7 @@ def jogo_config_payload(jogo: FortuneGemsJogo) -> dict:
             "aposta_minima": str(jogo.aposta_minima),
             "aposta_maxima": str(jogo.aposta_maxima),
             "jackpot_exibicao": str(jogo.jackpot_exibicao),
+            "chances": chances_payload(jogo.percentual_casa, jogo.percentual_usuario),
         },
         "simbolos": paytable_payload(),
         "linhas_ativas": 5,
@@ -100,7 +107,8 @@ def play_spin(sessao: FortuneGemsSessao, aposta_raw) -> dict:
         raise FortuneGemsError("saldo_insuficiente", "Saldo insuficiente para esta aposta.")
 
     saldo_antes = sessao.saldo
-    reels = spin_reels()
+    favor_usuario = roll_favor_usuario(jogo.percentual_usuario)
+    reels = spin_reels_biased(favor_usuario=favor_usuario, aposta=aposta)
     for sym in reels:
         if sym not in SYMBOL_IDS:
             raise FortuneGemsError("erro_interno", "Símbolo inválido no sorteio.")

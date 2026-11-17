@@ -4,10 +4,12 @@ SLOT_REGISTRY: dict[str, dict[str, str]] = {
     "fortune-gems": {
         "client_route": "#/fortune-gems",
         "api_prefix": "/api/v1/slots/fortune-gems/",
+        "contrato": "/docs/contratos/fortune-gems.md",
     },
     "wolf-gold": {
         "client_route": "#/wolf-gold",
         "api_prefix": "/api/v1/slots/wolf-gold/",
+        "contrato": "/docs/contratos/wolf-gold.md",
     },
 }
 
@@ -20,6 +22,7 @@ def play_meta_for_game(game: Game) -> dict | None:
             "mesa_slug": mesa,
             "client_route": "#/roleta",
             "contrato": "/docs/contratos/roleta.md",
+            "chances_contrato": "/docs/contratos/chances-demo.md",
             "api": {
                 "config": f"/api/v1/roleta/?mesa={mesa}",
                 "sessoes": "/api/v1/roleta/sessoes/",
@@ -36,6 +39,8 @@ def play_meta_for_game(game: Game) -> dict | None:
             "kind": "slot",
             "slot_slug": slot_slug,
             "client_route": slot["client_route"],
+            "contrato": slot.get("contrato"),
+            "chances_contrato": "/docs/contratos/chances-demo.md",
             "api": {
                 "config": f"{prefix}?jogo={slot_slug}",
                 "sessoes": f"{prefix}sessoes/",

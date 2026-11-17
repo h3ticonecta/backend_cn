@@ -46,10 +46,23 @@ No admin você gerencia: **Jogos**, **Provedores**, **Ao vivo**, **Promoções**
 | GET | `/api/v1/promotions/` | Promoções |
 | GET | `/api/v1/hero/` | Banner principal |
 | GET/POST | `/api/v1/roleta/…` | Jogo Roleta (demo) — [contrato](./docs/contratos/roleta.md) |
-| GET/POST | `/api/v1/slots/fortune-gems/…` | Slot Fortune Gems (demo): config, sessões, girar |
-| GET/POST | `/api/v1/slots/wolf-gold/…` | Slot Wolf Gold (demo): 5×3, 25 linhas, free spins, money respin |
+| GET/POST | `/api/v1/slots/fortune-gems/…` | Slot Fortune Gems — [contrato](./docs/contratos/fortune-gems.md) |
+| GET/POST | `/api/v1/slots/wolf-gold/…` | Slot Wolf Gold — [contrato](./docs/contratos/wolf-gold.md) |
 
-O JSON de cada jogo segue o tipo `Game` do frontend (`id`, `title`, `provider`, `category`, `badge`, `rtp`, `gradient`, `icon`).
+### Contratos (frontend)
+
+| Documento | Conteúdo |
+|-----------|----------|
+| [chances-demo.md](./docs/contratos/chances-demo.md) | `percentual_casa` / `percentual_usuario` no catálogo e `chances` nos configs — **compartilhado** |
+| [roleta.md](./docs/contratos/roleta.md) | Roleta completa |
+| [fortune-gems.md](./docs/contratos/fortune-gems.md) | Fortune Gems |
+| [wolf-gold.md](./docs/contratos/wolf-gold.md) | Wolf Gold |
+
+O JSON de cada jogo segue o tipo `Game` do frontend:
+
+`id`, `title`, `provider`, `category`, `badge`, `rtp`, `gradient`, `icon`, `play`, **`percentual_casa`**, **`percentual_usuario`** (strings decimais).
+
+Nos jogáveis, o config da mesa/slot inclui também `chances: { percentual_casa, percentual_usuario }`. Detalhes em [chances-demo.md](./docs/contratos/chances-demo.md).
 
 CORS liberado para `http://localhost:5173` por padrão (Vite).
 

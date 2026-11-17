@@ -19,6 +19,8 @@ class GameAdmin(admin.ModelAdmin):
         "category",
         "badge",
         "play_kind",
+        "percentual_casa",
+        "percentual_usuario",
         "is_featured",
         "is_new",
         "is_active",
@@ -36,6 +38,41 @@ class GameAdmin(admin.ModelAdmin):
     search_fields = ("title", "slug", "provider__name")
     prepopulated_fields = {"slug": ("title",)}
     autocomplete_fields = ("provider",)
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "slug",
+                    "title",
+                    "provider",
+                    "category",
+                    "badge",
+                    "rtp",
+                    "gradient_start",
+                    "gradient_end",
+                    "icon",
+                    "sort_order",
+                )
+            },
+        ),
+        (
+            "Jogabilidade",
+            {"fields": ("play_kind", "play_mesa_slug", "is_featured", "is_new", "is_active")},
+        ),
+        (
+            "Chances (casa × usuário)",
+            {
+                "fields": ("percentual_casa", "percentual_usuario"),
+                "description": (
+                    "A soma dos dois percentuais deve ser 100%. "
+                    "Ao salvar, valores são sincronizados com a mesa/slot "
+                    "vinculada (play_mesa_slug); alterações na mesa/slot "
+                    "também atualizam este jogo do catálogo."
+                ),
+            },
+        ),
+    )
 
 
 @admin.register(LiveSession)

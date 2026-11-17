@@ -23,6 +23,29 @@ def spin_wheel() -> int:
     return random.randint(0, 36)
 
 
+def spin_wheel_biased(
+    parsed_bets: list[tuple[str, int | None, Decimal]],
+    *,
+    favor_usuario: bool,
+) -> int:
+    """Escolhe o número que maximiza ou minimiza o pagamento total das apostas."""
+    best_n = 0
+    best_payout: Decimal | None = None
+    for n in range(37):
+        total = Decimal("0")
+        for tipo, numero, valor in parsed_bets:
+            if bet_wins(tipo, numero, n):
+                mult = payout_multiplier(tipo)
+                total += valor * (mult + 1)
+        if best_payout is None:
+            best_n, best_payout = n, total
+        elif favor_usuario and total > best_payout:
+            best_n, best_payout = n, total
+        elif not favor_usuario and total < best_payout:
+            best_n, best_payout = n, total
+    return best_n
+
+
 @dataclass(frozen=True)
 class PayoutRule:
     bet_type: str

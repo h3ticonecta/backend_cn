@@ -10,6 +10,7 @@ from playhub.wolf_gold.config import (
     LINES_COUNT,
     SCATTERS_TO_BONUS,
 )
+from playhub.chance_config import chances_payload, roll_favor_usuario
 from playhub.wolf_gold.models import WolfGoldGiro, WolfGoldJogo, WolfGoldSessao
 
 
@@ -39,6 +40,7 @@ def jogo_config_payload(jogo: WolfGoldJogo) -> dict:
             "aposta_maxima": str(jogo.aposta_maxima),
             "linhas": LINES_COUNT,
             "jackpots": {"mini": "20x", "major": "50x", "mega": "1000x"},
+            "chances": chances_payload(jogo.percentual_casa, jogo.percentual_usuario),
         },
         "simbolos": engine.paytable_payload(),
         "paylines": engine.paylines_payload(),
@@ -169,8 +171,20 @@ def play_action(sessao: WolfGoldSessao, aposta_raw, *, forcar: dict | None = Non
         forced = engine.parse_force_grid(forcar)
         if forced:
             grid, giant = forced, None
+        elif free_spin:
+            grid, giant = engine.spin_base_grid(free_spin=True)
         else:
-            grid, giant = engine.spin_base_grid(free_spin=free_spin)
+            favor_usuario = roll_favor_usuario(jogo.percentual_usuario)
+            grid, giant = engine.spin_base_grid(free_spin=False)
+            for _ in range(39):
+                line_prize_try, _ = engine.evaluate_paylines(grid, line_bet)
+                scatters_try = engine.count_symbol(grid, "scatter")
+                has_win = line_prize_try > 0 or scatters_try >= SCATTERS_TO_BONUS
+                if favor_usuario and has_win:
+                    break
+                if not favor_usuario and not has_win:
+                    break
+                grid, giant = engine.spin_base_grid(free_spin=False)
 
         line_prize, wins = engine.evaluate_paylines(grid, line_bet)
         premio += line_prize

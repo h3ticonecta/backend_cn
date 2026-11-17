@@ -4,8 +4,10 @@ from decimal import Decimal
 from django.db import models
 from django.utils import timezone
 
+from playhub.chance_config import ChancePercentMixin
 
-class RoletaMesa(models.Model):
+
+class RoletaMesa(ChancePercentMixin, models.Model):
     """Configuração da mesa de roleta (demo / play money)."""
 
     slug = models.SlugField(unique=True, default="roleta-brasil")

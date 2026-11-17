@@ -3,8 +3,10 @@ from decimal import Decimal
 
 from django.db import models
 
+from playhub.chance_config import ChancePercentMixin
 
-class FortuneGemsJogo(models.Model):
+
+class FortuneGemsJogo(ChancePercentMixin, models.Model):
     """Configuração do slot demo (play money)."""
 
     slug = models.SlugField(unique=True, default="fortune-gems")

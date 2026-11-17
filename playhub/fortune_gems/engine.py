@@ -53,6 +53,24 @@ def spin_reels() -> tuple[str, str, str]:
     return _pick_symbol(), _pick_symbol(), _pick_symbol()
 
 
+def spin_reels_biased(*, favor_usuario: bool, aposta: Decimal = Decimal("1")) -> tuple[str, str, str]:
+    """Sorteia carretéis alinhados ao perfil casa/usuário configurado."""
+    for _ in range(40):
+        reels = spin_reels()
+        ganhou = evaluate_spin(reels, aposta)[1]
+        if favor_usuario and ganhou:
+            return reels
+        if not favor_usuario and not ganhou:
+            return reels
+    if favor_usuario:
+        sym = SYMBOL_RULES[-2]["id"]
+        return sym, sym, sym
+    a, b, c = _pick_symbol(), _pick_symbol(), _pick_symbol()
+    while a == b == c:
+        c = _pick_symbol()
+    return a, b, c
+
+
 def evaluate_spin(reels: tuple[str, str, str], aposta: Decimal) -> tuple[Decimal, bool, str]:
     a, b, c = reels
     if a == b == c:

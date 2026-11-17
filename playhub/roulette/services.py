@@ -3,13 +3,14 @@ from decimal import Decimal
 from django.db import transaction
 
 from playhub.roulette.models import RoletaAposta, RoletaMesa, RoletaRodada, RoletaSessao
+from playhub.chance_config import chances_payload, roll_favor_usuario
 from playhub.roulette.wheel import (
     ALLOWED_BET_TYPES,
     PAYOUT_RULES,
     bet_wins,
     number_color,
     payout_multiplier,
-    spin_wheel,
+    spin_wheel_biased,
 )
 
 
@@ -41,6 +42,7 @@ def mesa_config_payload(mesa: RoletaMesa) -> dict:
             "aposta_minima": str(mesa.aposta_minima),
             "aposta_maxima": str(mesa.aposta_maxima),
             "max_apostas_por_giro": mesa.max_apostas_por_giro,
+            "chances": chances_payload(mesa.percentual_casa, mesa.percentual_usuario),
         },
         "tipos_aposta": [
             {
@@ -163,7 +165,8 @@ def play_round(sessao: RoletaSessao, apostas: list[dict]) -> dict:
         )
 
     saldo_antes = sessao.saldo
-    winning = spin_wheel()
+    favor_usuario = roll_favor_usuario(mesa.percentual_usuario)
+    winning = spin_wheel_biased(parsed, favor_usuario=favor_usuario)
     cor = number_color(winning)
 
     total_pago = Decimal("0")

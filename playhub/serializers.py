@@ -33,6 +33,8 @@ class GameSerializer(serializers.ModelSerializer):
             "gradient",
             "icon",
             "play",
+            "percentual_casa",
+            "percentual_usuario",
         )
 
     def get_badge(self, obj: Game):
